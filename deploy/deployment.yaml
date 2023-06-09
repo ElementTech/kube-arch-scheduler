@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scheduler-config
+  namespace: kube-system
+data:
+  scheduler-config.yaml: |
+    apiVersion: kubescheduler.config.k8s.io/v1beta3
+    kind: KubeSchedulerConfiguration
+    leaderElection:
+      leaderElect: true
+      lockObjectName: scheduler-framework-sample
+      lockObjectNamespace: kube-system
+    profiles:
+    - schedulerName: scheduler-framework-sample
+      plugins:
+        filter:
+          enabled:
+          - name: "sample"
+        preBind:
+          enabled:
+          - name: "sample"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler-framework-sample
+  namespace: kube-system
+  labels:
+    component: scheduler-framework-sample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: scheduler-framework-sample
+  template:
+    metadata:
+      labels:
+        component: scheduler-framework-sample
+    spec:
+      serviceAccount: sample-sa
+      priorityClassName: system-cluster-critical
+      volumes:
+      - name: scheduler-config
+        configMap:
+          name: scheduler-config
+      containers:
+      - name: scheduler-ctrl
+        image: scheduler-framework-sample:f99aae8
+        imagePullPolicy: IfNotPresent
+        args:
+        - scheduler-framework-sample
+        - --config=/scheduler/scheduler-config.yaml
+        - --v=3
+        resources:
+          requests:
+            cpu: "50m"
+        volumeMounts:
+        - name: scheduler-config
+          mountPath: /scheduler
