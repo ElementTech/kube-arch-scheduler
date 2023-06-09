@@ -3,6 +3,7 @@ module github.com/angao/kube-arch-scheduler
 go 1.16
 
 require (
+	github.com/docker/docker v20.10.7+incompatible
 	k8s.io/api v0.23.0
 	k8s.io/apimachinery v0.23.0
 	k8s.io/component-base v0.23.0
