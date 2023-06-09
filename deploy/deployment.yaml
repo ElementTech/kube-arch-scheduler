@@ -8,7 +8,7 @@ data:
     apiVersion: kubescheduler.config.k8s.io/v1beta3
     kind: KubeSchedulerConfiguration
     leaderElection:
-      leaderElect: true
+      leaderElect: false
       lockObjectName: kube-arch-scheduler
       lockObjectNamespace: kube-system
     profiles:
@@ -46,7 +46,7 @@ spec:
           name: scheduler-config
       containers:
       - name: scheduler-ctrl
-        image: kube-arch-scheduler:f99aae8
+        image: ghcr.io/jatalocks/kube-arch-scheduler:f0385bd
         imagePullPolicy: IfNotPresent
         args:
         - kube-arch-scheduler
