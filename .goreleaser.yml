@@ -35,7 +35,7 @@ archives:
 
 dockers:
   - image_templates:
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .ShortCommit }}-amd64"
     dockerfile: Dockerfile
     use: buildx
     build_flag_templates:
@@ -51,7 +51,7 @@ dockers:
       - "--label=org.opencontainers.image.source={{.GitURL}}"
       - "--platform=linux/amd64"
   - image_templates:
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .ShortCommit }}-arm64"
     dockerfile: Dockerfile
     use: buildx
     build_flag_templates:
@@ -70,14 +70,14 @@ dockers:
     goarch: arm64
 
 docker_manifests:
-  - name_template: "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}"
+  - name_template: "ghcr.io/jatalocks/{{.ProjectName}}:{{ .ShortCommit }}"
     image_templates:
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .ShortCommit }}-amd64"
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .ShortCommit }}-arm64"
   - name_template: "ghcr.io/jatalocks/{{.ProjectName}}:latest"
     image_templates:
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .ShortCommit }}-amd64"
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .ShortCommit }}-arm64"
 
 checksum:
   name_template: "checksums.txt"
