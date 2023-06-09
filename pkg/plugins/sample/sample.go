@@ -3,7 +3,8 @@ package sample
 import (
 	"context"
 
-	"github.com/docker/docker/client"
+	"github.com/containerd/containerd"
+	"github.com/containerd/containerd/namespaces"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/klog/v2"
@@ -50,19 +51,31 @@ func (s *Sample) Filter(ctx context.Context, state *framework.CycleState, pod *v
 }
 
 func GetSupportedArchitectures(imageName string) ([]string, error) {
-	cli, err := client.NewClientWithOpts(client.FromEnv)
+	client, err := containerd.New("/run/containerd/containerd.sock")
+	if err != nil {
+		return nil, err
+	}
+	defer client.Close()
+
+	ctx := namespaces.WithNamespace(context.Background(), "default")
+
+	image, err := client.GetImage(ctx, imageName)
 	if err != nil {
 		return nil, err
 	}
 
-	imageInspect, _, err := cli.ImageInspectWithRaw(context.Background(), imageName)
+	manifest, err := image.Manifest(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	supportedArchitectures := make([]string, 0)
-	for arch := range imageInspect.ContainerConfig.Labels {
-		supportedArchitectures = append(supportedArchitectures, arch)
+	for _, platform := range manifest.Platforms {
+		arch, err := oci.ParsePlatform(platform)
+		if err != nil {
+			return nil, err
+		}
+		supportedArchitectures = append(supportedArchitectures, arch.Architecture)
 	}
 
 	return supportedArchitectures, nil
