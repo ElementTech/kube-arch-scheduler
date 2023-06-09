@@ -1,4 +1,4 @@
-module github.com/angao/scheduler-framework-sample
+module github.com/angao/kube-arch-scheduler
 
 go 1.16
 

@@ -15,7 +15,7 @@ rules:
   - apiGroups:
       - ""
     resourceNames:
-      - scheduler-framework-sample
+      - kube-arch-scheduler
     resources:
       - endpoints
     verbs:

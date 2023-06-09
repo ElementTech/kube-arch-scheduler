@@ -12,7 +12,7 @@ spec:
       labels:
         app: busybox
     spec:
-      schedulerName: scheduler-framework-sample
+      schedulerName: kube-arch-scheduler
       terminationGracePeriodSeconds: 5
       containers:
       - image: busybox:latest

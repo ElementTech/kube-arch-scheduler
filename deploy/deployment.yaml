@@ -9,10 +9,10 @@ data:
     kind: KubeSchedulerConfiguration
     leaderElection:
       leaderElect: true
-      lockObjectName: scheduler-framework-sample
+      lockObjectName: kube-arch-scheduler
       lockObjectNamespace: kube-system
     profiles:
-    - schedulerName: scheduler-framework-sample
+    - schedulerName: kube-arch-scheduler
       plugins:
         filter:
           enabled:
@@ -24,19 +24,19 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scheduler-framework-sample
+  name: kube-arch-scheduler
   namespace: kube-system
   labels:
-    component: scheduler-framework-sample
+    component: kube-arch-scheduler
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: scheduler-framework-sample
+      component: kube-arch-scheduler
   template:
     metadata:
       labels:
-        component: scheduler-framework-sample
+        component: kube-arch-scheduler
     spec:
       serviceAccount: sample-sa
       priorityClassName: system-cluster-critical
@@ -46,10 +46,10 @@ spec:
           name: scheduler-config
       containers:
       - name: scheduler-ctrl
-        image: scheduler-framework-sample:f99aae8
+        image: kube-arch-scheduler:f99aae8
         imagePullPolicy: IfNotPresent
         args:
-        - scheduler-framework-sample
+        - kube-arch-scheduler
         - --config=/scheduler/scheduler-config.yaml
         - --v=3
         resources:

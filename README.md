@@ -1,9 +1,9 @@
-# scheduler-framework-sample
+# kube-arch-scheduler
 
-![](https://github.com/angao/scheduler-framework-sample/workflows/Go/badge.svg)
+![](https://github.com/angao/kube-arch-scheduler/workflows/Go/badge.svg)
 
 This repo is a sample for Kubernetes scheduler framework. The `sample` plugin implements `filter` and `prebind` extension points. 
-And the custom scheduler name is `scheduler-framework-sample` which defines in `KubeSchedulerConfiguration` object.
+And the custom scheduler name is `kube-arch-scheduler` which defines in `KubeSchedulerConfiguration` object.
 
 ## Build
 
