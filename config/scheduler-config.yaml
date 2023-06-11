@@ -6,7 +6,7 @@ clientConnection:
   kubeconfig: /Users/amitai.getzler/.kube/config
 profiles:
   - schedulerName: kube-arch-scheduler
-  - plugins:
+    plugins:
       filter:
         enabled:
           - name: "sample"
