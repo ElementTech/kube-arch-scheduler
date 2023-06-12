@@ -74,12 +74,13 @@ func (s *ArchFilter) Name() string {
 }
 
 func GetPodArchitectures(pod *v1.Pod) ([]string, error) {
-	architectures := make([]string, len(pod.Spec.Containers))
+	architectures := make([]string, 0)
 	for _, container := range pod.Spec.Containers {
 		val, err := FetchFromCache(cacheStore, container.Image)
 		// If the key exists
 		if err == nil {
 			architectures = append(architectures, val.Architecture)
+			klog.V(2).Info("Found in cache: ", container.Image, " ", val.Architecture)
 		} else {
 			klog.V(2).Info(container.Image)
 			ref, err := name.ParseReference(container.Image)
@@ -95,6 +96,7 @@ func GetPodArchitectures(pod *v1.Pod) ([]string, error) {
 				return architectures, err
 			}
 			AddToCache(cacheStore, ImageArch{Image: container.Image, Architecture: manifest.Architecture})
+			klog.V(2).Info("Added to cache: ", container.Image, " ", manifest.Architecture)
 			architectures = append(architectures, manifest.Architecture)
 		}
 	}
@@ -111,8 +113,9 @@ func (s *ArchFilter) Filter(ctx context.Context, state *framework.CycleState, po
 		return framework.NewStatus(framework.Error, "Failed to get pod architectures")
 	}
 	for _, arch := range podArchitectures {
+		klog.V(2).Info("Comparing pod architecture: ", arch, " with node architecture: ", nodeArch)
 		if nodeArch != arch {
-			return framework.NewStatus(framework.Unschedulable, "Incompatible node architecture found", nodeArch, arch)
+			return framework.NewStatus(framework.Unschedulable, "Incompatible node architecture found", nodeArch)
 		}
 	}
 
