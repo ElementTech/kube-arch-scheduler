@@ -1,0 +1,101 @@
+env:
+  - GO111MODULE=on
+  - CGO_ENABLED=0
+
+builds:
+  - binary: kube-arch-scheduler
+    ldflags: -s -w -X main.version={{ .Version }}
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - builds:
+      - kube-arch-scheduler
+    format_overrides:
+      - goos: windows
+        format: zip
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      amd64: x86_64
+
+dockers:
+  - image_templates:
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--pull"
+      - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/jatalocks/kube-arch-scheduler/main/README.md"
+      - '--label=io.artifacthub.package.maintainers=[{"name":"Jatalocks","email":"amitai333@gmail.com"}]'
+      - "--label=io.artifacthub.package.license=MIT"
+      - "--label=org.opencontainers.image.description=A container image architecture aware Kubernetes scheduler plugin"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+      - "--platform=linux/amd64"
+  - image_templates:
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--pull"
+      - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/jatalocks/kube-arch-scheduler/main/README.md"
+      - "--label=io.artifacthub.package.logo-url=https://raw.githubusercontent.com/jatalocks/kube-arch-scheduler/main/assets/logo/logo.png"
+      - '--label=io.artifacthub.package.maintainers=[{"name":"Jatalocks","email":"amitai333@gmail.com"}]'
+      - "--label=io.artifacthub.package.license=MIT"
+      - "--label=org.opencontainers.image.description=A container image architecture aware Kubernetes scheduler plugin"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+      - "--platform=linux/arm64"
+    goarch: arm64
+
+docker_manifests:
+  - name_template: "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}"
+    image_templates:
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
+  - name_template: "ghcr.io/jatalocks/{{.ProjectName}}:latest"
+    image_templates:
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^test:"
+      - "^chore"
+      - "merge conflict"
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+      - go mod tidy
+  groups:
+    - title: Dependency updates
+      regexp: '^.*?(feat|fix)\(deps\)!?:.+$'
+      order: 300
+    - title: "New Features"
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 100
+    - title: "Bug fixes"
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 200
+    - title: "Documentation updates"
+      regexp: ^.*?doc(\([[:word:]]+\))??!?:.+$
+      order: 400
+    - title: Other work
+      order: 9999

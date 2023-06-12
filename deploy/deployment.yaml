@@ -16,10 +16,7 @@ data:
       plugins:
         filter:
           enabled:
-          - name: "sample"
-        preBind:
-          enabled:
-          - name: "sample"
+          - name: "archfilter"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,23 +35,24 @@ spec:
       labels:
         component: kube-arch-scheduler
     spec:
-      serviceAccount: sample-sa
+      serviceAccount: kube-arch-scheduler-sa
       priorityClassName: system-cluster-critical
       volumes:
-      - name: scheduler-config
-        configMap:
-          name: scheduler-config
-      containers:
-      - name: scheduler-ctrl
-        image: ghcr.io/jatalocks/kube-arch-scheduler:f0385bd
-        imagePullPolicy: IfNotPresent
-        args:
-        - kube-arch-scheduler
-        - --config=/scheduler/scheduler-config.yaml
-        - --v=3
-        resources:
-          requests:
-            cpu: "50m"
-        volumeMounts:
         - name: scheduler-config
-          mountPath: /scheduler
+          configMap:
+            name: scheduler-config
+      containers:
+        - name: scheduler-ctrl
+          image: ghcr.io/jatalocks/kube-arch-scheduler:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - kube-arch-scheduler
+            - --config=/scheduler/scheduler-config.yaml
+            - --v=3
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: scheduler-config
+              mountPath: /scheduler

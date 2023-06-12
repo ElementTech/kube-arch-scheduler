@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kube-arch-scheduler.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    component: kube-arch-scheduler
+  {{- include "kube-arch-scheduler.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.controllerManager.replicaCount }}
+  selector:
+    matchLabels:
+      component: kube-arch-scheduler
+    {{- include "kube-arch-scheduler.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        component: kube-arch-scheduler
+      {{- include "kube-arch-scheduler.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccount: {{ include "kube-arch-scheduler.fullname" . }}-sa
+      priorityClassName: system-cluster-critical
+      volumes:
+        - name: scheduler-config
+          configMap:
+            name: scheduler-config
+      containers:
+        - name: scheduler-ctrl
+          image: {{ .Values.controllerManager.manager.image.repository }}:{{ .Values.controllerManager.manager.image.tag }}
+          imagePullPolicy: Always
+          args:
+            - kube-arch-scheduler
+            - --config=/scheduler/scheduler-config.yaml
+            - --v=3
+          resources:
+            {{- toYaml .Values.controllerManager.manager.resources | nindent 10 }}
+          volumeMounts:
+            - name: scheduler-config
+              mountPath: /scheduler

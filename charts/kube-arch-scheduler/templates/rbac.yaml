@@ -1,7 +1,7 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: kube-arch-scheduler-cr
+  name: {{ include "kube-arch-scheduler.fullname" . }}-cr
 rules:
   - apiGroups:
       - ""
@@ -136,19 +136,19 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: kube-arch-scheduler-sa
-  namespace: kube-system
+  name: {{ include "kube-arch-scheduler.fullname" . }}-sa
+  namespace: {{ .Release.Namespace }}
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: kube-arch-scheduler-crb
-  namespace: kube-system
+  name: {{ include "kube-arch-scheduler.fullname" . }}-crb
+  namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kube-arch-scheduler-cr
+  name: {{ include "kube-arch-scheduler.fullname" . }}-cr
 subjects:
   - kind: ServiceAccount
-    name: kube-arch-scheduler-sa
-    namespace: kube-system
+    name: {{ include "kube-arch-scheduler.fullname" . }}-sa
+    namespace: {{ .Release.Namespace }}
