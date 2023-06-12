@@ -2,7 +2,12 @@ package sample
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
+	"github.com/google/go-containerregistry/pkg/authn"
+	"github.com/google/go-containerregistry/pkg/name"
+	"github.com/google/go-containerregistry/pkg/v1/remote"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/klog/v2"
@@ -40,6 +45,20 @@ func (s *Sample) Filter(ctx context.Context, state *framework.CycleState, pod *v
 	klog.V(2).Infof("filter pod: %v, %v", pod.Name, nodeArch)
 	for _, container := range pod.Spec.Containers {
 		klog.V(2).Info(container.Image)
+		ref, err := name.ParseReference(container.Image)
+		if err != nil {
+			klog.V(2).ErrorS(err, "failed to parse ref image")
+		}
+		img, err := remote.Image(ref, remote.WithAuthFromKeychain(authn.DefaultKeychain))
+		if err != nil {
+			klog.V(2).ErrorS(err, "failed to get image")
+		}
+		manifest, err := img.Manifest()
+		if err != nil {
+			klog.V(2).ErrorS(err, "failed to get manifest")
+		}
+		json, _ := json.Marshal(manifest.Config)
+		fmt.Println(string(json))
 		// result, err := GetDigest(ctx, container.Image)
 		// klog.V(2).Info(result)
 		// if err != nil {
