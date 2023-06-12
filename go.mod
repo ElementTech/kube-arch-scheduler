@@ -1,6 +1,6 @@
 module github.com/jatalocks/kube-arch-scheduler
 
-go 1.20
+go 1.19
 
 require (
 	github.com/google/go-containerregistry v0.15.2
