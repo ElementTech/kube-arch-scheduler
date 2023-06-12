@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/jatalocks/kube-arch-scheduler/pkg/plugins/sample"
+	"github.com/jatalocks/kube-arch-scheduler/pkg/plugins/archfilter"
 	"k8s.io/component-base/logs"
 	"k8s.io/kubernetes/cmd/kube-scheduler/app"
 )
@@ -17,7 +17,7 @@ func main() {
 	defer logs.FlushLogs()
 
 	cmd := app.NewSchedulerCommand(
-		app.WithPlugin(sample.Name, sample.New),
+		app.WithPlugin(archfilter.Name, archfilter.New),
 	)
 
 	if err := cmd.Execute(); err != nil {

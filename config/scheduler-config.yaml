@@ -9,7 +9,7 @@ profiles:
     plugins:
       filter:
         enabled:
-          - name: "sample"
+          - name: "archfilter"
       # preBind:
       #   enabled:
       #     - name: "sample"
