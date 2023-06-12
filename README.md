@@ -35,7 +35,7 @@ nonDefaultSchedulerName: kube-arch-scheduler
 Use this command to run the scheduler locally while connected to your Kubernetes cluster's context:
 
 ```shell
-go run cmd/scheduler/main.go --authentication-kubeconfig ~/.kube/config --authorization-kubeconfig ~/.kube/config --config=./example/scheduler-config.yaml --v=2
+go run main.go --authentication-kubeconfig ~/.kube/config --authorization-kubeconfig ~/.kube/config --config=./example/scheduler-config.yaml --v=2
 ```
 
 You can use the [example deployment](example/busybox.yaml) in order to test the scheduler on a live pod:

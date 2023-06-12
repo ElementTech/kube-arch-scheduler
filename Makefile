@@ -25,10 +25,10 @@ init:
 	mkdir -p ${BIN_DIR}
 
 local: init
-	go build -o=${BIN_DIR}/kube-arch-scheduler ./cmd/scheduler
+	go build -o=${BIN_DIR}/kube-arch-scheduler .
 
 build-linux: init
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o=${BIN_DIR}/kube-arch-scheduler ./cmd/scheduler
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o=${BIN_DIR}/kube-arch-scheduler .
 
 image: build-linux
 	docker build --no-cache . -t ghcr.io/jatalocks/kube-arch-scheduler:$(TAG)
