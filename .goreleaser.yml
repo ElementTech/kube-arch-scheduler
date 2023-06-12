@@ -4,6 +4,7 @@ env:
 
 builds:
   - binary: kube-arch-scheduler
+    ldflags: -s -w -X main.version={{ .Version }}
     goos:
       - linux
       - darwin
@@ -67,3 +68,34 @@ docker_manifests:
     image_templates:
       - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
       - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^test:"
+      - "^chore"
+      - "merge conflict"
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+      - go mod tidy
+  groups:
+    - title: Dependency updates
+      regexp: '^.*?(feat|fix)\(deps\)!?:.+$'
+      order: 300
+    - title: "New Features"
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 100
+    - title: "Bug fixes"
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 200
+    - title: "Documentation updates"
+      regexp: ^.*?doc(\([[:word:]]+\))??!?:.+$
+      order: 400
+    - title: Other work
+      order: 9999
