@@ -5,7 +5,7 @@ env:
 builds:
   - binary: kube-arch-scheduler
     ldflags: -s -w -X main.version={{ .Version }}
-    main: ./cmd/scheduler/main
+    main: ./cmd/scheduler/main.go
     goos:
       - linux
       - darwin
