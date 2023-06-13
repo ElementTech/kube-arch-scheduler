@@ -17,7 +17,7 @@ profiles:
       - name: archfilter
         args:
           weight:
-            amd64: 50
+            amd64: 25
             arm64: 100
             arm: 75
             ppc64le: 0
