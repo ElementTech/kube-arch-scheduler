@@ -17,10 +17,22 @@ data:
         filter:
           enabled:
           - name: "archfilter"
+        score:
+          enabled:
+          - name: "archfilter"
     {{ else }}
     - schedulerName: {{.Values.nonDefaultSchedulerName}}
       plugins:
         filter:
           enabled:
           - name: "archfilter"
+        score:
+          enabled:
+          - name: "archfilter" 
     {{ end }}
+      pluginConfig:
+        - name: archfilter
+          args:
+            weight:
+{{ .Values.weight | toYaml | indent 14 }}
+

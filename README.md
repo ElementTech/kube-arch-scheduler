@@ -10,7 +10,9 @@
 </p>
 
 **kube-arch-scheduler** is a kubernetes scheduler filter plugin that will filter nodes by the compatibility of the container image architectures (platforms) present in a Pod.
+
 ## Deploy - Helm
+
 ```bash
 helm repo add kube-arch-scheduler https://jatalocks.github.io/kube-arch-scheduler/
 helm repo update
@@ -18,17 +20,39 @@ helm install -n kube-system kube-arch-scheduler/kube-arch-scheduler
 ```
 
 **Core Values:**
+
 ```yaml
+controllerManager:
+  manager:
+    image:
+      repository: ghcr.io/jatalocks/kube-arch-scheduler
+      tag: latest
+    resources:
+      requests:
+        cpu: 0.5
+        memory: 100Mi
+  replicaCount: 1
+
 # While enabled, this will add the scheduler to the default scheduler plugins,
 # this will make it affect all pods in the cluster.
-addToDefaultScheduler: true 
+addToDefaultScheduler: true
 
 # If addToDefaultScheduler if false, this will be the name of the scheduler,
 # and it will only affect pods with: [schedulerName: kube-arch-scheduler].
 nonDefaultSchedulerName: kube-arch-scheduler
+
+# The weight of each architecture,
+# if a pod can sit on both, it will prefer the one with the higher weight.
+# The default weight of undefined architectures is 0, meaning none will have
+# any particular preference.
+weight:
+  amd64: 0
+  arm64: 0
+  arm: 0
+  ppc64le: 0
+  s390x: 0
+  riscv64: 0
 ```
-## Prerequisites
-- The scheduler controller should be able to query all the pods' container image manifests. It will use current Kubernetes default credentials and networking configuration.
 
 ## Development
 
