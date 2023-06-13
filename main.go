@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
-	"time"
 
 	"github.com/jatalocks/kube-arch-scheduler/pkg/plugins/archfilter"
 	"k8s.io/component-base/logs"
