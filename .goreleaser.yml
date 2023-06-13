@@ -11,6 +11,17 @@ builds:
       - amd64
       - arm64
 
+archives:
+  - builds:
+      - kube-arch-scheduler
+    format_overrides:
+      - goos: windows
+        format: zip
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      amd64: x86_64
+      
 dockers:
   - image_templates:
       - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
