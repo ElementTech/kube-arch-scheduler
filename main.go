@@ -12,7 +12,6 @@ import (
 )
 
 func main() {
-	rand.Seed(time.Now().UTC().UnixNano())
 	logs.InitLogs()
 	defer logs.FlushLogs()
 
