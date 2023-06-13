@@ -30,7 +30,6 @@ type ImageArch struct {
 
 var _ framework.FilterPlugin = &ArchFilter{}
 var _ framework.ScorePlugin = &ArchFilter{}
-var _ framework.NormalizeScorePlugin = &ArchFilter{}
 
 func cacheKeyFunc(obj interface{}) (string, error) {
 	return obj.(ImageArch).Image, nil
