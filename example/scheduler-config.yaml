@@ -10,6 +10,16 @@ profiles:
       filter:
         enabled:
           - name: "archfilter"
-      # preBind:
-      #   enabled:
-      #     - name: "sample"
+      score:
+        enabled:
+          - name: "archfilter"
+    pluginConfig:
+      - name: archfilter
+        args:
+          weight:
+            amd64: 50
+            arm64: 100
+            arm: 75
+            ppc64le: 0
+            s390x: 0
+            riscv64: 0

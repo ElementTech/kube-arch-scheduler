@@ -29,6 +29,8 @@ type ImageArch struct {
 }
 
 var _ framework.FilterPlugin = &ArchFilter{}
+var _ framework.ScorePlugin = &ArchFilter{}
+var _ framework.NormalizeScorePlugin = &ArchFilter{}
 
 func cacheKeyFunc(obj interface{}) (string, error) {
 	return obj.(ImageArch).Image, nil
@@ -58,15 +60,19 @@ func DeleteFromCache(cacheStore cache.Store, object string) error {
 	return cacheStore.Delete(object)
 }
 
-// var _ framework.PreBindPlugin = &ArchFilter{}
-
 type ArchFilter struct {
 	handle framework.Handle
 }
 
 func New(_ runtime.Object, handle framework.Handle) (framework.Plugin, error) {
+	args, ok := obj.(*config.WeightArgs)
+	if !ok {
+		return nil, fmt.Errorf("want args to be of type WeightArgs, got %T", obj)
+	}
+	
 	return &ArchFilter{
 		handle: handle,
+		weight: args.Weight,
 	}, nil
 }
 
@@ -128,33 +134,22 @@ func (s *ArchFilter) Filter(ctx context.Context, state *framework.CycleState, po
 	return framework.NewStatus(framework.Success, "Node with compatible architecture found", nodeArch)
 }
 
-// // GetDigest return the docker digest of given image name
-// func GetDigest(ctx context.Context, name string) (string, error) {
-// 	if digestCache[name] != "" {
-// 		return digestCache[name], nil
-// 	}
-// 	ref, err := docker.ParseReference("//" + name)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	img, err := ref.NewImage(ctx, nil)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	defer func() {
-// 		if err := img.Close(); err != nil {
-// 			log.Print(err)
-// 		}
-// 	}()
-// 	b, _, err := img.Manifest(ctx)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	digest, err := manifest.Digest(b)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	digeststr := string(digest)
-// 	digestCache[name] = digeststr
-// 	return digeststr, nil
-// }
+func (s *ArchFilter) Score(ctx context.Context, state *framework.CycleState, p *v1.Pod, node *framework.NodeInfo) (int64, *framework.Status) {
+	nodeArch := node.Node().Status.NodeInfo.Architecture
+	val, ok := s.Weight[nodeArch]
+	// If the key exists
+	if ok {
+		klog.Infof("[ArchFilter] node '%s' weight found in config: %s", nodeName, val)
+		return int64(val), nil
+	} else {
+		klog.Infof("[ArchFilter] node '%s' weight not found in config, using default: %s", nodeName, 0)
+		return 0, nil
+	}
+}
+
+type WeightArgs struct {
+	metav1.TypeMeta `json:",inline"`
+
+	// Address of the Prometheus Server
+	Weight *map[string][int64] `json:"weight,omitempty"`
+}
