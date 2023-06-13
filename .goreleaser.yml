@@ -7,7 +7,6 @@ builds:
     ldflags: -s -w -X main.version={{ .Version }}
     goos:
       - linux
-      - darwin
     goarch:
       - amd64
       - arm64
@@ -40,6 +39,8 @@ dockers:
       - "--label=org.opencontainers.image.version={{.Version}}"
       - "--label=org.opencontainers.image.source={{.GitURL}}"
       - "--platform=linux/amd64"
+    goarch: amd64
+    goos: linux      
   - image_templates:
       - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
     dockerfile: Dockerfile
@@ -58,6 +59,7 @@ dockers:
       - "--label=org.opencontainers.image.source={{.GitURL}}"
       - "--platform=linux/arm64"
     goarch: arm64
+    goos: linux
 
 docker_manifests:
   - name_template: "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}"
