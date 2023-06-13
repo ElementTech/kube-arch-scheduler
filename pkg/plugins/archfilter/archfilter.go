@@ -8,6 +8,7 @@ import (
 	"github.com/google/go-containerregistry/pkg/authn"
 	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/google/go-containerregistry/pkg/v1/remote"
+	"golang.org/x/exp/slices"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/klog/v2"
@@ -23,8 +24,8 @@ const (
 )
 
 type ImageArch struct {
-	Image        string
-	Architecture string
+	Image         string
+	Architectures []string
 }
 
 var _ framework.FilterPlugin = &ArchFilter{}
@@ -73,35 +74,40 @@ func (s *ArchFilter) Name() string {
 	return Name
 }
 
-func GetPodArchitectures(pod *v1.Pod) ([]string, error) {
-	architectures := make([]string, 0)
+func GetPodArchitectures(pod *v1.Pod) ([]ImageArch, error) {
+	containers := []ImageArch{}
 	for _, container := range pod.Spec.Containers {
 		val, err := FetchFromCache(cacheStore, container.Image)
 		// If the key exists
+		architectures := make([]string, 0)
 		if err == nil {
-			architectures = append(architectures, val.Architecture)
-			klog.V(2).Info("Found in cache: ", container.Image, " ", val.Architecture)
+			architectures = append(architectures, val.Architectures...)
+			containers = append(containers, ImageArch{Image: container.Image, Architectures: architectures})
+			klog.V(2).Info("Found in cache: ", container.Image, " ", val.Architectures)
 		} else {
 			klog.V(2).Info(container.Image)
 			ref, err := name.ParseReference(container.Image)
 			if err != nil {
-				return architectures, err
+				return containers, err
 			}
-			img, err := remote.Image(ref, remote.WithAuthFromKeychain(authn.DefaultKeychain))
+			index, err := remote.Index(ref, remote.WithAuthFromKeychain(authn.DefaultKeychain))
 			if err != nil {
-				return architectures, err
+				return containers, err
 			}
-			manifest, err := img.ConfigFile()
+			imageIndex, err := index.IndexManifest()
 			if err != nil {
-				return architectures, err
+				return containers, err
 			}
-			AddToCache(cacheStore, ImageArch{Image: container.Image, Architecture: manifest.Architecture})
-			klog.V(2).Info("Added to cache: ", container.Image, " ", manifest.Architecture)
-			architectures = append(architectures, manifest.Architecture)
+			for _, manifest := range imageIndex.Manifests {
+				architectures = append(architectures, manifest.Platform.Architecture)
+			}
+			klog.V(2).Info("Added to cache: ", container.Image, " ", architectures)
+			containers = append(containers, ImageArch{Image: container.Image, Architectures: architectures})
+			AddToCache(cacheStore, ImageArch{Image: container.Image, Architectures: architectures})
 		}
 	}
 
-	return architectures, nil
+	return containers, nil
 }
 
 func (s *ArchFilter) Filter(ctx context.Context, state *framework.CycleState, pod *v1.Pod, node *framework.NodeInfo) *framework.Status {
@@ -112,13 +118,13 @@ func (s *ArchFilter) Filter(ctx context.Context, state *framework.CycleState, po
 		klog.V(2).ErrorS(err, "failed to get image architectures")
 		return framework.NewStatus(framework.Error, "Failed to get pod architectures")
 	}
-	for _, arch := range podArchitectures {
-		klog.V(2).Info("Comparing pod architecture: ", arch, " with node architecture: ", nodeArch)
-		if nodeArch != arch {
+	for _, container := range podArchitectures {
+		klog.V(2).Info("Comparing pod/container architecture: ", container, " with node architecture: ", nodeArch)
+
+		if slices.Contains(container.Architectures, nodeArch) == false {
 			return framework.NewStatus(framework.Unschedulable, "Incompatible node architecture found", nodeArch)
 		}
 	}
-
 	return framework.NewStatus(framework.Success, "Node with compatible architecture found", nodeArch)
 }
 
