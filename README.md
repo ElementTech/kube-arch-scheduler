@@ -1,5 +1,5 @@
-# Kubernetes Architecture Scheduler Plugin
 
+<h1 align="center">Kubernetes Architecture Scheduler Plugin</h1>
 <p align="center">An image architecture aware Kubernetes scheduler plugin</p>
 
 <p align="center">
@@ -9,7 +9,7 @@
 <a  target="_blank"><img src="https://img.shields.io/github/go-mod/go-version/jatalocks/kube-arch-scheduler"/></a>
 </p>
 
-**kube-arch-scheduler** is a kubernetes scheduler filter plugin that will filter nodes by the compatibility of the container image architectures (platforms) present in a Pod.
+**kube-arch-scheduler** is a kubernetes scheduler filter plugin that will filter nodes by the compatibility of the container image architectures (platforms) present in a Pod. It can also assign weight to each architecture, so that pods can prefer sitting on a specific one.
 
 ## Deploy - Helm
 
