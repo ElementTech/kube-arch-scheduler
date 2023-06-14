@@ -10,22 +10,16 @@ data:
     profiles:
     {{ if .Values.addToDefaultScheduler }}
     - plugins:
-        filter:
-          enabled:
-          - name: "archfilter"
-        score:
-          enabled:
-          - name: "archfilter"
     {{ else }}
-    - schedulerName: {{.Values.nonDefaultSchedulerName}}
+    - schedulerName: {{ .Values.nonDefaultSchedulerName }}
       plugins:
+    {{ end }}
         filter:
           enabled:
           - name: "archfilter"
         score:
           enabled:
-          - name: "archfilter" 
-    {{ end }}
+          - name: "archfilter"
       pluginConfig:
         - name: archfilter
           args:

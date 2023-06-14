@@ -117,7 +117,7 @@ func GetPodArchitectures(pod *v1.Pod) ([]ImageArch, error) {
 			klog.V(2).Info("Found in cache: ", container.Image, " ", val.Architectures)
 		} else {
 			klog.V(2).Info(container.Image)
-			ref, err := name.ParseReference(container.Image)
+			ref, err := name.ParseReference(container.Image, name.Insecure)
 			if err != nil {
 				return containers, err
 			}
