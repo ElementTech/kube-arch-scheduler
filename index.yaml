@@ -3,6 +3,16 @@ entries:
   kube-arch-scheduler:
   - apiVersion: v2
     appVersion: 0.0.5
+    created: "2023-06-14T08:41:10.032628498Z"
+    description: A Helm chart for Kubernetes
+    digest: fefd0e036e2c18b1c60eec8cbfff711829a91dd4ce65a1f77d60cc6b282fafc9
+    name: kube-arch-scheduler
+    type: application
+    urls:
+    - https://github.com/jatalocks/kube-arch-scheduler/releases/download/kube-arch-scheduler-0.0.14/kube-arch-scheduler-0.0.14.tgz
+    version: 0.0.14
+  - apiVersion: v2
+    appVersion: 0.0.5
     created: "2023-06-14T08:21:28.925156212Z"
     description: A Helm chart for Kubernetes
     digest: 370143f640c1e6fb636abccf9b5a80488c361e2cd091b9bc816aa3ca91adca38
@@ -101,4 +111,4 @@ entries:
     urls:
     - https://github.com/jatalocks/kube-arch-scheduler/releases/download/kube-arch-scheduler-0.0.4/kube-arch-scheduler-0.0.4.tgz
     version: 0.0.4
-generated: "2023-06-14T08:21:28.925201711Z"
+generated: "2023-06-14T08:41:10.032684398Z"
