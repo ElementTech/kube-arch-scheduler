@@ -112,6 +112,7 @@ rules:
     resources:
       - storageclasses
       - csinodes
+      - csistoragecapacities
     verbs:
       - get
       - list
