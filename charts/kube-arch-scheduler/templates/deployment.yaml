@@ -23,7 +23,7 @@ spec:
       volumes:
         - name: scheduler-config
           configMap:
-            name: scheduler-config
+            name: {{ include "kube-arch-scheduler.fullname" . }}-config
       containers:
         - name: scheduler-ctrl
           image: {{ .Values.controllerManager.manager.image.repository }}:{{ .Values.controllerManager.manager.image.tag }}
