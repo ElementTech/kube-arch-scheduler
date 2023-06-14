@@ -22,17 +22,6 @@ helm install -n kube-system kube-arch-scheduler/kube-arch-scheduler
 **Core Values:**
 
 ```yaml
-controllerManager:
-  manager:
-    image:
-      repository: ghcr.io/jatalocks/kube-arch-scheduler
-      tag: latest
-    resources:
-      requests:
-        cpu: 0.5
-        memory: 100Mi
-  replicaCount: 1
-
 # While enabled, this will add the scheduler to the default scheduler plugins,
 # this will make it affect all pods in the cluster.
 addToDefaultScheduler: true
