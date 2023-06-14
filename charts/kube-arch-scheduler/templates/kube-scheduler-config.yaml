@@ -8,21 +8,21 @@ data:
     apiVersion: kubescheduler.config.k8s.io/v1beta3
     kind: KubeSchedulerConfiguration
     profiles:
-    {{ if .Values.addToDefaultScheduler }}
-    - plugins:
-    {{ else }}
-    - schedulerName: {{ .Values.nonDefaultSchedulerName }}
-      plugins:
-    {{ end }}
-        filter:
-          enabled:
-          - name: "archfilter"
-        score:
-          enabled:
-          - name: "archfilter"
-      pluginConfig:
-        - name: archfilter
-          args:
-            weight:
-{{ .Values.weight | toYaml | indent 14 }}
+{{- if .Values.addToDefaultScheduler }}
+      - plugins:
+{{- else }}
+      - schedulerName: {{ .Values.nonDefaultSchedulerName }}
+        plugins:
+{{- end }}
+          filter:
+            enabled:
+              - name: "archfilter"
+          score:
+            enabled:
+              - name: "archfilter"
+        pluginConfig:
+          - name: archfilter
+            args:
+              weight:
+{{ .Values.weight | toYaml | indent 16 }}
 

@@ -2,9 +2,11 @@ package archfilter
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/google/go-containerregistry/pkg/authn"
@@ -121,7 +123,10 @@ func GetPodArchitectures(pod *v1.Pod) ([]ImageArch, error) {
 			if err != nil {
 				return containers, err
 			}
-			index, err := remote.Index(ref, remote.WithAuthFromKeychain(authn.DefaultKeychain))
+			index, err := remote.Index(ref, remote.WithAuthFromKeychain(authn.DefaultKeychain),
+				remote.WithTransport(&http.Transport{
+					TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+				}))
 			if err != nil {
 				return containers, err
 			}
