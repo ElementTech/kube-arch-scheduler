@@ -33,7 +33,7 @@ spec:
             - --config=/scheduler/scheduler-config.yaml
             - --v=3
           resources:
-            {{- toYaml .Values.controllerManager.manager.resources | nindent 10 }}
+            {{- toYaml .Values.controllerManager.manager.resources | nindent 12 }}
           volumeMounts:
             - name: scheduler-config
               mountPath: /scheduler
