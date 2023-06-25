@@ -41,6 +41,12 @@ addToDefaultScheduler: true
 # and it will only affect pods with: [schedulerName: kube-arch-scheduler].
 nonDefaultSchedulerName: kube-arch-scheduler
 
+# dockerconfig.json is a base64 encoded docker config file, it will be used
+# to pull the image manifests. The pod needs to have the secret mounted at
+# /root/.docker/config.json. This is only needed if you are using a private
+# registry. If you are using a public registry, you can leave this empty.
+dockerConfigSecretName: ""
+
 # The weight of each architecture,
 # if a pod can sit on both, it will prefer the one with the higher weight.
 # The default weight of undefined architectures is 0, meaning none will have

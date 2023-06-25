@@ -24,6 +24,11 @@ spec:
         - name: scheduler-config
           configMap:
             name: {{ include "kube-arch-scheduler.fullname" . }}-config
+        {{ if .Values.dockerConfigSecretName }}
+        - name: registry-creds
+          secret:
+            secretName: {{ .Values.dockerConfigSecretName }}
+        {{ end }}
       containers:
         - name: scheduler-ctrl
           image: {{ .Values.controllerManager.manager.image.repository }}:{{ .Values.controllerManager.manager.image.tag }}
@@ -37,3 +42,8 @@ spec:
           volumeMounts:
             - name: scheduler-config
               mountPath: /scheduler
+          {{ if .Values.dockerConfigSecretName }}
+            - name: registry-creds
+              mountPath: "/root/.docker"
+              readOnly: true
+          {{ end }}
