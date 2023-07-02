@@ -7,8 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
+	ecrlogin "github.com/awslabs/amazon-ecr-credential-helper/ecr-login"
+	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/api"
 	"github.com/google/go-containerregistry/pkg/authn"
 	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/google/go-containerregistry/pkg/v1/remote"
@@ -123,10 +126,20 @@ func GetPodArchitectures(pod *v1.Pod) ([]ImageArch, error) {
 			if err != nil {
 				return containers, err
 			}
+
 			index, err := remote.Index(ref, remote.WithAuthFromKeychain(authn.DefaultKeychain),
 				remote.WithTransport(&http.Transport{
 					TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 				}))
+
+			if strings.Contains(container.Image, "amazonaws.com") {
+				ecrHelper := ecrlogin.NewECRHelper(ecrlogin.WithClientFactory(api.DefaultClientFactory{}))
+				index, err = remote.Index(ref, remote.WithAuthFromKeychain(authn.NewKeychainFromHelper(ecrHelper)),
+					remote.WithTransport(&http.Transport{
+						TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+					}))
+			}
+
 			if err != nil {
 				return containers, err
 			}
