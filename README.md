@@ -30,6 +30,7 @@ addToDefaultScheduler: true
 # and it will only affect pods with: [schedulerName: kube-arch-scheduler].
 nonDefaultSchedulerName: kube-arch-scheduler
 
+# This is relevant if your Kubernetes pod does not have permissions to your private registries.
 # dockerconfig.json is a base64 encoded docker config file, it will be used
 # to pull the image manifests. The pod needs to have the secret mounted at
 # /root/.docker/config.json. This is only needed if you are using a private
