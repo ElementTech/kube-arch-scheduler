@@ -14,7 +14,7 @@
 ## Deploy - Helm
 
 ```bash
-helm repo add kube-arch-scheduler https://jatalocks.github.io/kube-arch-scheduler/
+helm repo add kube-arch-scheduler https://elementtech.github.io/kube-arch-scheduler/
 helm repo update
 helm install -n kube-system kube-arch-scheduler/kube-arch-scheduler
 ```
