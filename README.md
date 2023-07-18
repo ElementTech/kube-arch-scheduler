@@ -3,10 +3,10 @@
 <p align="center">An image architecture aware Kubernetes scheduler plugin</p>
 
 <p align="center">
-<a  target="_blank"><img src="https://img.shields.io/github/v/release/jatalocks/kube-arch-scheduler" /></a>
-<a  target="_blank"><img src="https://img.shields.io/github/downloads/jatalocks/kube-arch-scheduler/total"/></a>
-<a  target="_blank"><img src="https://img.shields.io/github/issues/jatalocks/kube-arch-scheduler"/></a>
-<a  target="_blank"><img src="https://img.shields.io/github/go-mod/go-version/jatalocks/kube-arch-scheduler"/></a>
+<a  target="_blank"><img src="https://img.shields.io/github/v/release/elementtech/kube-arch-scheduler" /></a>
+<a  target="_blank"><img src="https://img.shields.io/github/downloads/elementtech/kube-arch-scheduler/total"/></a>
+<a  target="_blank"><img src="https://img.shields.io/github/issues/elementtech/kube-arch-scheduler"/></a>
+<a  target="_blank"><img src="https://img.shields.io/github/go-mod/go-version/elementtech/kube-arch-scheduler"/></a>
 </p>
 
 **kube-arch-scheduler** is a kubernetes scheduler filter plugin that will filter nodes by the compatibility of the container image architectures (platforms) present in a Pod. It can also assign weight to each architecture, so that pods can prefer sitting on a specific one.
@@ -66,4 +66,4 @@ kubectl deploy -f example/busybox.yaml
 
 ## Support
 
-<a href="https://www.buymeacoffee.com/jatalocks" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+<a href="https://www.buymeacoffee.com/elementtech" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>

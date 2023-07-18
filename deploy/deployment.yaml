@@ -43,7 +43,7 @@ spec:
             name: scheduler-config
       containers:
         - name: scheduler-ctrl
-          image: ghcr.io/jatalocks/kube-arch-scheduler:latest
+          image: ghcr.io/elementtech/kube-arch-scheduler:latest
           imagePullPolicy: IfNotPresent
           args:
             - kube-arch-scheduler

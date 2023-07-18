@@ -1,4 +1,4 @@
-# Copyright 2019 The jatalocks Authors.
+# Copyright 2019 The elementtech Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,10 +31,10 @@ build-linux: init
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o=${BIN_DIR}/kube-arch-scheduler .
 
 image: build-linux
-	docker build --no-cache . -t ghcr.io/jatalocks/kube-arch-scheduler:$(TAG)
+	docker build --no-cache . -t ghcr.io/elementtech/kube-arch-scheduler:$(TAG)
 
 push: 
-	docker push ghcr.io/jatalocks/kube-arch-scheduler:$(TAG)
+	docker push ghcr.io/elementtech/kube-arch-scheduler:$(TAG)
 
 update:
 	go mod download

@@ -26,12 +26,12 @@ archives:
       
 dockers:
   - image_templates:
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/elementtech/{{.ProjectName}}:{{ .Tag }}-amd64"
     dockerfile: Dockerfile
     use: buildx
     build_flag_templates:
       - "--pull"
-      - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/jatalocks/kube-arch-scheduler/main/README.md"
+      - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/elementtech/kube-arch-scheduler/main/README.md"
       - '--label=io.artifacthub.package.maintainers=[{"name":"Jatalocks","email":"amitai333@gmail.com"}]'
       - "--label=io.artifacthub.package.license=MIT"
       - "--label=org.opencontainers.image.description=A container image architecture aware Kubernetes scheduler plugin"
@@ -44,13 +44,13 @@ dockers:
     goarch: amd64
     goos: linux      
   - image_templates:
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
+      - "ghcr.io/elementtech/{{.ProjectName}}:{{ .Tag }}-arm64"
     dockerfile: Dockerfile
     use: buildx
     build_flag_templates:
       - "--pull"
-      - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/jatalocks/kube-arch-scheduler/main/README.md"
-      - "--label=io.artifacthub.package.logo-url=https://raw.githubusercontent.com/jatalocks/kube-arch-scheduler/main/assets/logo/logo.png"
+      - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/elementtech/kube-arch-scheduler/main/README.md"
+      - "--label=io.artifacthub.package.logo-url=https://raw.githubusercontent.com/elementtech/kube-arch-scheduler/main/assets/logo/logo.png"
       - '--label=io.artifacthub.package.maintainers=[{"name":"Jatalocks","email":"amitai333@gmail.com"}]'
       - "--label=io.artifacthub.package.license=MIT"
       - "--label=org.opencontainers.image.description=A container image architecture aware Kubernetes scheduler plugin"
@@ -64,14 +64,14 @@ dockers:
     goos: linux
 
 docker_manifests:
-  - name_template: "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}"
+  - name_template: "ghcr.io/elementtech/{{.ProjectName}}:{{ .Tag }}"
     image_templates:
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
-  - name_template: "ghcr.io/jatalocks/{{.ProjectName}}:latest"
+      - "ghcr.io/elementtech/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/elementtech/{{.ProjectName}}:{{ .Tag }}-arm64"
+  - name_template: "ghcr.io/elementtech/{{.ProjectName}}:latest"
     image_templates:
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-amd64"
-      - "ghcr.io/jatalocks/{{.ProjectName}}:{{ .Tag }}-arm64"
+      - "ghcr.io/elementtech/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/elementtech/{{.ProjectName}}:{{ .Tag }}-arm64"
 
 checksum:
   name_template: "checksums.txt"

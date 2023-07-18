@@ -1,4 +1,4 @@
-module github.com/jatalocks/kube-arch-scheduler
+module github.com/elementtech/kube-arch-scheduler
 
 go 1.20
 

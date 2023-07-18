@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jatalocks/kube-arch-scheduler/pkg/plugins/archfilter"
+	"github.com/elementtech/kube-arch-scheduler/pkg/plugins/archfilter"
 	"k8s.io/component-base/logs"
 	"k8s.io/kubernetes/cmd/kube-scheduler/app"
 )
