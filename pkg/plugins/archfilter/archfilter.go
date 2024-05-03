@@ -95,7 +95,7 @@ func DecodeInto(obj runtime.Object, into interface{}) error {
 	}
 }
 
-func New(obj runtime.Object, handle framework.Handle) (framework.Plugin, error) {
+func New(ctx context.Context, obj runtime.Object, handle framework.Handle) (framework.Plugin, error) {
 	args := &WeightArgs{}
 	if err := DecodeInto(obj, args); err != nil {
 		return nil, err
