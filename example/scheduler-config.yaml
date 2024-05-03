@@ -3,7 +3,7 @@ kind: KubeSchedulerConfiguration
 leaderElection:
   leaderElect: false
 clientConnection:
-  kubeconfig: /Users/amitai.getzler/.kube/config
+  kubeconfig: /Users/MYNAME/.kube/config
 profiles:
   - schedulerName: kube-arch-scheduler
     plugins:
